@@ -1,17 +1,23 @@
 import { Link, useNavigate } from "react-router-dom";
 import ContainerAuth from "../components/layout/ContainerAuth";
 import { axiosMusic } from "../config/axios.congif";
+import { useUserInfo } from "../store/userInfo";
 
 const Login = () => {
+
+
+  const login = useUserInfo(( state => state.login))
+
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.target));
-    console.log(data);
 
     axiosMusic
       .post("/api/auth/login", data)
-      .then(({ data }) => navigate("/"))
+      .then(({ data }) => 
+      login(data),
+      navigate("/"))
       .catch((err) => console.log(err));
   };
   return (
